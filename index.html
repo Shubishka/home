@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Шубишка | Архитектурное бюро</title>
+    <style>
+        /* Базовые стили для чистого архитектурного минимализма */
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #f8f9fa; color: #1a1a1a; margin: 0; padding: 0; }
+
+        /* Фиксированная шапка */
+        header { position: fixed; top: 0; left: 0; right: 0; height: 80px; background: rgba(248, 249, 250, 0.9); backdrop-filter: blur(10px); display: flex; justify-content: space-between; align-items: center; padding: 0 40px; z-index: 1000; box-sizing: border-box; border-bottom: 1px solid rgba(0,0,0,0.03); }
+        .logo-container { display: flex; align-items: center; gap: 15px; cursor: pointer; }
+        .logo-img { height: 30px; width: auto; object-fit: contain; }
+        h1 { font-weight: 700; letter-spacing: -1px; margin: 0; font-size: 26px; }
+
+        /* Навигация (вкладки) */
+        .nav-links button { background: none; border: none; margin-left: 25px; color: #777; font-size: 14px; font-weight: 500; cursor: pointer; padding: 5px 0; transition: color 0.2s ease; font-family: inherit; }
+        .nav-links button:hover, .nav-links button.active { color: #000; font-weight: 600; }
+
+        /* Контейнер для контента страниц */
+        main { padding-top: 80px; box-sizing: border-box; }
+        .page { display: none; padding: 40px; max-width: 1200px; margin: 0 auto; box-sizing: border-box; }
+        .page.active { display: block; }
+
+        /* Вкладка 1: ГЛАНАЯ СТРАНИЦА (Стартовый аккуратный вид) */
+        .home-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(450px, 1fr)); gap: 40px; }
+        .home-card { background: #fff; overflow: hidden; border-radius: 6px; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
+        .home-card img { width: 100%; height: 320px; object-fit: cover; display: block; }
+        .home-info { padding: 25px; }
+        .home-title { font-weight: 600; font-size: 18px; margin-bottom: 8px; }
+        .home-desc { color: #888; font-size: 14px; line-height: 1.5; }
+
+        /* Вкладка 2: ПРОЕКТЫ (Вертикальная бесконечная лента без каши) */
+                /* Обновленная вертикальная лента проектов */
+        .projects-vertical-list { display: flex; flex-direction: column; gap: 40px; max-width: 900px; margin: 0 auto; }
+        
+        .vertical-project-card { 
+            background: #fff; 
+            border-radius: 6px; 
+            overflow: hidden; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02); 
+            display: grid; 
+            grid-template-columns: 350px 1fr; /* Фиксированная ширина фото — 350px, остальное под текст */
+            align-items: center; 
+        }
+        
+        .vertical-project-card img { 
+            width: 350px; 
+            height: 250px; 
+            object-fit: cover; /* Картинка аккуратно заполняет блок без искажений */
+            display: block; 
+        }
+        
+        .vertical-project-info { padding: 30px; }
+        .vertical-title { font-weight: 600; font-size: 18px; margin-bottom: 10px; color: #1a1a1a; }
+        .vertical-desc { color: #777; font-size: 14px; line-height: 1.5; }
+
+        /* Адаптация для мобильных: на телефонах фото встанет над текстом */
+        @media (max-width: 768px) {
+            .vertical-project-card { grid-template-columns: 1fr; }
+            .vertical-project-card img { width: 100%; height: 200px; }
+            .vertical-project-info { padding: 20px; }
+        }
+
+
+        /* Вкладка 3: О БЮРО И КОНТАКТЫ (Статичная страница без прокрутки) */
+        .about-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: start; }
+        .about-photos { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        .about-photos img { width: 100%; height: 280px; object-fit: cover; border-radius: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+        .about-text-block { background: #fff; padding: 40px; border-radius: 8px; box-shadow: 0 4px 25px rgba(0,0,0,0.02); box-sizing: border-box; }
+        .about-text-block h2 { font-size: 24px; font-weight: 700; margin-top: 0; margin-bottom: 20px; }
+        .about-p { color: #555; font-size: 15px; line-height: 1.7; margin-bottom: 30px; }
+
+        .contacts-box { border-top: 1px solid #eee; padding-top: 30px; display: flex; flex-direction: column; gap: 15px; }
+        .contact-item { font-size: 14px; color: #666; }
+        .contact-item strong { color: #000; font-size: 15px; display: block; margin-bottom: 2px; }
+
+        /* Мобильная адаптация */
+        @media (max-width: 768px) {
+            header { padding: 0 20px; }
+            .page { padding: 20px; }
+            .home-grid { grid-template-columns: 1fr; gap: 20px; }
+            .about-layout { grid-template-columns: 1fr; gap: 30px; }
+            .vertical-project-info { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container" onclick="switchPage('home')">
+            <!-- Место под логотип, если файла нет — текст встанет ровно -->
+            <img src="logo.png" alt="Логотип" class="logo-img" onerror="this.style.display='none'">
+            <h1>ШУБИШКА</h1>
+        </div>
+        <div class="nav-links">
+            <button id="btn-home" class="active" onclick="switchPage('home')">Главная</button>
+            <button id="btn-projects" onclick="switchPage('projects')">Проекты</button>
+            <button id="btn-about" onclick="switchPage('about')">О бюро</button>
+        </div>
+    </header>
+
+    <main>
+        <!-- СТРАНИЦА 1: ГЛАВНАЯ (Как у вас на скриншоте) -->
+        <div id="page-home" class="page active">
+            <div class="home-grid">
+                <div class="home-card">
+                    <img src="project1.webp" alt="Концепт бюро Шубишка">
+                    <div class="home-info">
+                        <div class="home-title">Жилой комплекс «Мираж»</div>
+                        <div class="home-desc">Концептуальная экологическая архитектура, 2026.</div>
+                    </div>
+                </div>
+                <div class="home-card">
+                    <img src="project2.webp" alt="Проект бюро Шубишка">
+                    <div class="home-info">
+                        <div class="home-title">Минималистичная вилла в лесу</div>
+                        <div class="home-desc">Интеграция бетона и стекла в ландшафт.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- СТРАНИЦА 2: ПРОЕКТЫ (Вертикальная лента скролла из 10 картинок) -->
+        <div id="page-projects" class="page">
+                       <div class="projects-vertical-list">
+
+                <!-- Проект 3 (Первый в уникальной ленте) -->
+                <div class="vertical-project-card">
+                    <img src="project3.webp" alt="Архитектура Шубишка">
+                    <div class="vertical-project-info">
+                        <div class="vertical-title">Брутал Сити Москва №3</div>
+                        <div class="vertical-desc">Бывало ли у вас такое ощущение, что вам в жизни не хватает мощи и брутальности? Зачем вам бесполезные парки и гипсофобные виды из окна, если можно инвестировать в чистую, бескомпромиссную площадь из серого бетона? Мы убрали всё лишнее — благоустройство, детские площадки и солнечный свет — чтобы втиснуть рекордные 5 000 000 квартир прямо в эпицентр многоуровневой автомобильной развязки. Живя здесь, вы будете находиться в идеальной транспортной доступности, серая дымка за окном избавит от необходимости покупать шторы. Шубишка не продает уют, мы продаем квадратные метры — покупайте сейчас, пока мы не построили вторую очередь вплотную!</div>
+                    </div>
+                </div>
+
+                <!-- Проект 4 -->
+                <div class="vertical-project-card">
+                    <img src="project4.webp" alt="Архитектура Шубишка">
+                    <div class="vertical-project-info">
+                        <div class="vertical-title">ЖК "Полярная звезда"</div>
+                        <div class="vertical-desc">Устали от городской суеты, душного лета и заоблачных цен на недвижимость? Мы предлагаем дешёвую жилплощадь в самом экологически чистом районе планеты — высокоширотной Арктике, где вас встретит абсолютная тишина. Забудьте о кондиционерах и жаре: здесь всегда освежающе прохладно, а вместо раздражающего утреннего солнца вас ждет роскошная шестимесячная полярная ночь. Приятный бонус прямо у порога — очаровательные и пушистые белые медведи, которых при должной смелости можно даже погладить. ЖК расположен на острове Ушакова, рядом есть замечательный пляж и замечательный вид на море. Прямо на пляже вам бесплатно раздают коктейли со льдом.</div>
+                    </div>
+                </div>
+
+                <!-- Проект 5 -->
+                <div class="vertical-project-card">
+                    <img src="project5.webp" alt="Архитектура Шубишка">
+                    <div class="vertical-project-info">
+                        <div class="vertical-title">ЖК Синий кирпич, Новочебоксарск</div>
+                        <div class="vertical-desc">Забудьте о шторах: ядовито-красный фасадный неон обеспечит вам бесплатную клубную хромотерапию прямо в спальне 24/7. Запутанная паутина высоковольтных проводов прямо за окном подарит району неповторимый индустриальный шарм, а плотная застройка избавит от навязчивого солнечного света и одиночества — ведь вы сможете заглянуть в телефон соседа напротив. Мы полностью очистили двор от бесполезных деревьев ради эстетичного мокрого асфальта, а тончайшие стены позволят вам наслаждаться плейлистом соседей, не выходя из своей уютной квартиры.</div>
+                    </div>
+                </div>
+
+                <!-- Проект 6 -->
+                <div class="vertical-project-card">
+                    <img src="project6.webp" alt="Архитектура Шубишка">
+                    <div class="vertical-project-info">
+                        <div class="vertical-title">ЖК American Sity</div>
+                        <div class="vertical-desc">Зачем тратить время на дорогу до магистрали, если восемь полос скоростного шоссе могут быть прямо в вашем доме? Наш уникальный комплекс интегрирован непосредственно в гигантскую многоуровневую развязку, гарантируя жильцам транспортную автомобильную доступность тридцатиполосных магистралей по всему городу. Мы полностью ликвидировали пешеходные зоны и дворы — для обеспеченя лучшей среды для автомобилиста вместо них мы построили премиальные гаражи и 50-этажную парковку. Наши жители никогда не испытывают трудностей со способом добраться до школы или работы. Этот ЖК - прямой потомок американских субурбий и развязок!</div>
+                    </div>
+                </div>
+
+                <!-- Проект 7 -->
+                <div class="vertical-project-card">
+                    <img src="project7.webp" alt="Архитектура Шубишка">
+                    <div class="vertical-project-info">
+                        <div class="vertical-title">ЖК "Атлантида Премиум" - Новокузнецк</div>
+                        <div class="vertical-desc">Мечтали о жилье у воды? Мы пошли дальше и построили башни прямо в динамично расширяющемся водоеме, искусно используя карстовые пустоты, размыв грунтов и наши фирменные непродуманные коммуникации. Каждое утро вас ждет незабываемый аттракцион: нижние этажи плавно и грациозно погружаются в пучину, превращая обычные подземные паркинги в эксклюзивные дайвинг-центры, а жильцов третьих этажей — в счастливых обладателей элитных сивью-апартаментов. Спешите купить квартиру на верхних уровнях, пока они не стали первыми, ведь «Атлантида» — это недвижимость, которая становится частью гидросферы Земли</div>
+                    </div>
+                </div>
+
+                <!-- Проект 8 -->
+                <div class="vertical-project-card">
+                    <img src="project8.webp" alt="Архитектура Шубишка">
+                    <div class="vertical-project-info">
+                        <div class="vertical-title">ЖК "Imperial-Capital group", Москва</div>
+                        <div class="vertical-desc">Зачем переплачивать за огромные пустые пространства, если можно стать обладателем элитной недвижимости в самом сердце Москвы всего за цену хорошего автомобиля за один крошечный сантиметр? Зато прямо у вашего порога бьет ключом столичная жизнь, а станция метро расположена настолько близко, что вы всегда можете определить, что приближается поезд по дрожжанию мебели, и успеть на него!. Спешите приобрести свой личный кусочек бетонного пола в центре цивилизации — ведь премиальную цену всего 4 миллиона рублей за квадратный сантиметр вы платите не за площадь не за площадь, а за статус, который можно измерить школьной линейкой!</div>
+                    </div>
+                </div>
+
+                <!-- Проект 9 -->
+                <div class="vertical-project-card">
+                    <img src="project9.webp" alt="Архитектура Шубишка">
+                    <div class="vertical-project-info">
+                        <div class="vertical-title">"СЭЗ Liberty" (Свободная экономическая зона)</div>
+                        <div class="vertical-desc">Забудьте о скучном и жестком контроле со стороны управляющих компаний. Наш комплекс предлагает абсолютную свободу заселения — здесь рады абсолютно всем. Каждая квартира — это суверенное государство, где нижние этажи искусно превращены в склады контрафакта, около некоторых - странные звуки треска (наверное кто-то оставил счётчик Гейгера). В некоторых квартирах есть казино, клубы, русская рулетка. Каждая семья говорит на своём языке, тут и хинди, узбекский, таджикский, и даже китайский. Покупайте долю в ЖК «Интернациональный Экспресс»: ведь только здесь вы сможете купить шаурму просто выйдя на лестничную клетку, получить смертельную дозу радиации за секунду, быть заколоты заточкой в лифте или купить вещества!</div>
+                    </div>
+                </div>
+
+                <!-- Проект 10 -->
+                <div class="vertical-project-card">
+                    <img src="project10.webp" alt="Архитектура Шубишка">
+                    <div class="vertical-project-info">
+                        <div class="vertical-title">ЖК "Микрорайон 67" г. Братск</div>
+                        <div class="vertical-desc">С первого взгляда этот ЖК кажется совсем незаметным. Однако вы очень сильно ошибаетесь. Это один из новейших ЖК бизнес-класса, стилизованный под обычную хрущёвку, чтобы лучше вписаться в городскую среду. Он идеален для тех, кто обманул инвесторов и хочет залечь на дно. Вся инфраструктура воссоздана в современном стиле Mid Century, есть магазин Шестёрочка, созданы стилизованные бабушки у подъезда. Мы создали всю необъодимую среду, даже пустили электробусы, стилизованные под маршрутки ресторан, стилизованный под столовую! При помощи нанотехнологий мы искуственно проржавили детскую площадку. Здесь есть всё, чтобы вы почувствовали себя уютно!</div>
+                    </div>
+                </div>
+
+                <!-- Проект 11 -->
+                <div class="vertical-project-card">
+                    <img src="project11.webp" alt="Архитектура Шубишка">
+                    <div class="vertical-project-info">
+                        <div class="vertical-title">ЖК Разводилово</div>
+                        <div class="vertical-desc">Этот ЖК для самых дальновидных людей, которые планируют всё до мелочей на 50 лет вперёд! И да, сроки сдачи этого ЖК переносятся вот уже 50 лет! У жильцов есть праздник: ровно 1 апреля каждого года срок сдачи переносится ровно на 1 год вперёд. И не зря это делается в день дурака! Здесь самая минималистичная отделка стен и система комуникаций - её просто нет. Рядом есть вода из лужи, которая иногда подогревается солнцем. Это наша забота об экологически чистой энергии!</div>
+                    </div>
+                </div>
+
+                <!-- Проект 12 (Десятый в уникальной ленте) -->
+                <div class="vertical-project-card">
+                    <img src="project12.webp" alt="Архитектура Шубишка">
+                    <div class="vertical-project-info">
+                        <div class="vertical-title">ЖК "Мусорок" - Москва</div>
+                        <div class="vertical-desc">Да, вам не показалось, он действительно находится прямо в мусорном полигоне. Но ведь это же идеально: вам больше не надо ходить, выбрасывать мусор - вы можете просто выкинуть его из окна. Это гигиенично и чисто. ЖК передаёт несравнимый аромат, но не переживайте - возможно, на свалке лежит продукция парфюмерного завода, она перебьёт ненужный запах. А друзьям можно сказать, что вы купили дом с видом на золотые горы Алтая, и что Москва и туда разрослась. В принципе, если будет густой туман - отличить подделку будет невозможно!.</div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- СТРАНИЦА 3: О БЮРО И КОНТАКТЫ (Статичный аккуратный экран) -->
+        <div id="page-about" class="page">
+            <div class="about-layout">
+
+                <!-- Левая сторона: 2 фотографии зданий -->
+                <div class="about-photos">
+                    <img src="office-building.webp" alt="Здание бюро">
+                    <img src="office-entrance.webp" alt="Вход в бюро">
+                </div>
+
+                <!-- Правая сторона: Информация, адрес и логотип -->
+                <div class="about-text-block">
+                    <h2>Архитектурное бюро «Шубишка»</h2>
+                    <div class="about-p">
+                        Мы создаем концептуальные пространства, объединяющие строгую геометрию форм и функциональность. Каждая линия в наших проектах подчинена внутренней логике комфорта и эстетики минимализма.
+                    </div>
+
+                    <div class="contacts-box">
+                        <div class="contact-item">
+                            <strong>Адрес бюро:</strong>
+                            Хозяйственный корпус, посёлок Амдерма, Заполярный район, Ненецкий автономный округ,  бывшая аэрологическая станция. Координаты: 69.762007 с. ш, 61.67106 в. д. Вход с улицы Полярная, на север от метеослужбы. Ориентир - Карское море.
+                        </div>
+                        <div class="contact-item">
+                            <strong>Связаться с нами:</strong>
+                            Email: adm-amderma@yandex.ru <br>
+                            Телефон: +7 (81857) 23-7-02
+                        </div>
+
+                        <!-- Логотип-заглушка внизу блока -->
+                        <div style="margin-top: 20px; font-weight: 800; font-size: 20px; letter-spacing: 3px; color: #e0e0e0;">
+                            ШУБИШКА
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Скрипт мгновенного переключения вкладок без перезагрузки -->
+    <script>
+        function switchPage(pageId) {
+            // Прячем все страницы
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            // Убираем активный класс у кнопок меню
+            // Убираем активный класс у кнопок меню
+            document.querySelectorAll('.nav-links button').forEach(btn => btn.classList.remove('active'));
+
+            // Показываем нужную страницу
+            document.getElementById('page-' + pageId).classList.add('active');
+            // Делаем кнопку активной
+            document.getElementById('btn-' + pageId).classList.add('active');
+
+            // Сбрасываем скролл наверх при переключении вкладки
+            window.scrollTo(0, 0);
+        }
+    </script>
+
+</body>
+</html>
